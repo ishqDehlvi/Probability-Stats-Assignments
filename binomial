@@ -1,0 +1,25 @@
+import numpy as np
+from scipy.optimize import minimize
+
+def neg_log_likelihood(params, mean, variance):
+    n, p = params
+    predicted_mean = n * p
+    predicted_variance = n * p * (1 - p)
+    return (predicted_mean - mean) ** 2 / mean + (predicted_variance - variance) ** 2 / variance
+
+data = [0, 1, 1, 1, 0, 1, 0, 1, 1, 1]
+mean = np.mean(data)
+variance = np.var(data)
+
+initial_params = [10, 0.5]
+
+result = minimize(neg_log_likelihood, initial_params, args=(mean, variance), method='Nelder-Mead')
+fitted_params = result.x
+fitted_n, fitted_p = fitted_params
+
+print("Computed mean:", mean)
+print("Computed variance:", variance)
+
+print("\nFitted parameters:")
+print("n =", fitted_n)
+print("p =", fitted_p)
